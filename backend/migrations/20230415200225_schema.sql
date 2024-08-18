@@ -1,0 +1,138 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    role VARCHAR NOT NULL DEFAULT 'customer'
+);
+
+CREATE TABLE IF NOT EXISTS personal_information (
+    id SERIAL PRIMARY KEY,
+    user_id int NOT NULL UNIQUE,
+    firstName VARCHAR(255) NULL,
+    lastName VARCHAR(255) NULL,
+    dob DATE NULL,
+    sex VARCHAR(255) NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS user_linkable (
+    id SERIAL PRIMARY KEY,
+    user_id int NOT NULL UNIQUE,
+    link_type VARCHAR(255) NOT NULL,
+    link_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS contact_type (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(255) NOT NULL,
+    data VARCHAR(255) NULL,
+    logo VARCHAR(255) NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS contact_methods (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    data VARCHAR(255) NOT NULL,
+    contact_type_id int NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_contact_type FOREIGN KEY (contact_type_id) REFERENCES contact_type (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS address (
+    id SERIAL PRIMARY KEY,
+    street_address VARCHAR(255) NOT NULL,
+    suburb VARCHAR(255) NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    post_code VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS addressables (
+    id SERIAL PRIMARY KEY,
+    linkable_id int NOT NULL,
+    linkable_type int NOT NULL,
+    address_id int NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_address FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    user_id int NOT NULL,
+    external_id VARCHAR(255) NOT NULL UNIQUE,
+    amount int NOT NULL,
+    extra_data VARCHAR(255) NULL,
+    status VARCHAR(255) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS order_item (
+    id SERIAL PRIMARY KEY,
+    order_id int NOT NULL,
+    external_id VARCHAR(255) NOT NULL UNIQUE,
+    amount int NOT NULL,
+    extra_data VARCHAR(255) NULL,
+    status VARCHAR(255) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orders FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS my_table (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NULL,
+    data JSON NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS sessions (
+    id SERIAL PRIMARY KEY,
+    session_id VARCHAR NOT NULL UNIQUE,
+    user_id int NOT NULL UNIQUE,
+    expires TIMESTAMP WITH TIME ZONE,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS customers (
+    id SERIAL PRIMARY KEY,
+    firstName VARCHAR NOT NULL,
+    lastName VARCHAR NOT NULL,
+    email VARCHAR NOT NULL,
+    phone VARCHAR(14) NOT NULL,
+    priority SMALLINT NOT NULL CHECK (priority >= 1 AND priority <= 5),
+    owner_id int NOT NULL,
+    is_archived BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FK_customer FOREIGN KEY(owner_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS deals (
+    id SERIAL PRIMARY KEY,
+    estimate_worth INT,
+    actual_worth INT,
+    status VARCHAR NOT NULL,
+    closed VARCHAR NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    customer_id int NOT NULL,
+    owner_id int NOT NULL,
+    CONSTRAINT FK_deal FOREIGN KEY(owner_id) REFERENCES users(id),
+    CONSTRAINT FK_owner FOREIGN KEY(owner_id) REFERENCES users(id),
+    is_archived BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS apikeys (
+    id SERIAL PRIMARY KEY,
+    api_key VARCHAR NOT NULL,
+    owner_id int,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_used TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FK_customer FOREIGN KEY (owner_id) REFERENCES users(id)
+);
