@@ -1,0 +1,348 @@
+{
+    "id": 5588689944641,
+    "name": "#1001",
+    "note": null,
+    "tags": "",
+    "test": true,
+    "email": "vanha101096@gmail.com",
+    "phone": null,
+    "token": "aba9919edfd9c3e971d7e0bec95ba999",
+    "app_id": 12875497473,
+    "number": 1,
+    "refunds": [],
+    "user_id": null,
+    "currency": "AUD",
+    "customer": {
+        "id": 7033511051329,
+        "note": null,
+        "tags": "",
+        "email": "vanha101096@gmail.com",
+        "phone": null,
+        "state": "disabled",
+        "currency": "AUD",
+        "last_name": "ha",
+        "created_at": "2024-08-19T01:51:20+10:00",
+        "first_name": "van",
+        "tax_exempt": false,
+        "updated_at": "2024-08-19T01:51:23+10:00",
+        "tax_exemptions": [],
+        "verified_email": true,
+        "default_address": {
+            "id": 8335625846849,
+            "zip": "3000",
+            "city": "Melbourne",
+            "name": "van ha",
+            "phone": null,
+            "company": null,
+            "country": "Australia",
+            "default": true,
+            "address1": "447 Collins Street",
+            "address2": null,
+            "province": "Victoria",
+            "last_name": "ha",
+            "first_name": "van",
+            "customer_id": 7033511051329,
+            "country_code": "AU",
+            "country_name": "Australia",
+            "province_code": "VIC"
+        },
+        "admin_graphql_api_id": "gid://shopify/Customer/7033511051329",
+        "multipass_identifier": null,
+        "sms_marketing_consent": null,
+        "email_marketing_consent": {
+            "state": "not_subscribed",
+            "opt_in_level": "single_opt_in",
+            "consent_updated_at": null
+        }
+    },
+    "closed_at": null,
+    "confirmed": true,
+    "device_id": null,
+    "po_number": null,
+    "reference": "2ec3444f89a6557b0b8d1b38c88b4812",
+    "tax_lines": [],
+    "total_tax": "0.00",
+    "browser_ip": "2001:4479:6801:7f00:5875:7457:a37:1e33",
+    "cart_token": null,
+    "created_at": "2024-08-19T01:51:23+10:00",
+    "line_items": [
+        {
+            "id": 13829861179457,
+            "sku": "",
+            "name": "Hybrid-Metal NFC Business Card - Silver",
+            "grams": 200,
+            "price": "99.99",
+            "title": "Hybrid-Metal NFC Business Card",
+            "duties": [],
+            "vendor": "Qtap Organization",
+            "taxable": false,
+            "quantity": 1,
+            "gift_card": false,
+            "price_set": {
+                "shop_money": {
+                    "amount": "99.99",
+                    "currency_code": "AUD"
+                },
+                "presentment_money": {
+                    "amount": "99.99",
+                    "currency_code": "AUD"
+                }
+            },
+            "tax_lines": [],
+            "product_id": 7400507113537,
+            "properties": [],
+            "variant_id": 41640280424513,
+            "variant_title": "Silver",
+            "product_exists": true,
+            "total_discount": "0.00",
+            "current_quantity": 1,
+            "attributed_staffs": [],
+            "requires_shipping": true,
+            "fulfillment_status": null,
+            "total_discount_set": {
+                "shop_money": {
+                    "amount": "0.00",
+                    "currency_code": "AUD"
+                },
+                "presentment_money": {
+                    "amount": "0.00",
+                    "currency_code": "AUD"
+                }
+            },
+            "fulfillment_service": "manual",
+            "admin_graphql_api_id": "gid://shopify/LineItem/13829861179457",
+            "discount_allocations": [],
+            "fulfillable_quantity": 1,
+            "variant_inventory_management": null
+        }
+    ],
+    "source_url": null,
+    "tax_exempt": false,
+    "updated_at": "2024-08-19T01:51:24+10:00",
+    "checkout_id": 41538272690241,
+    "location_id": null,
+    "source_name": "12875497473",
+    "total_price": "109.99",
+    "cancelled_at": null,
+    "fulfillments": [],
+    "landing_site": "/",
+    "order_number": 1001,
+    "processed_at": "2024-08-19T01:51:20+10:00",
+    "total_weight": 200,
+    "cancel_reason": null,
+    "contact_email": "vanha101096@gmail.com",
+    "payment_terms": null,
+    "total_tax_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        }
+    },
+    "checkout_token": "055e84b110bd3276dcb3f20b15fc943f",
+    "client_details": {
+        "browser_ip": "2001:4479:6801:7f00:5875:7457:a37:1e33",
+        "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+        "session_hash": null,
+        "browser_width": null,
+        "browser_height": null,
+        "accept_language": "en"
+    },
+    "discount_codes": [],
+    "referring_site": "",
+    "shipping_lines": [
+        {
+            "id": 4574590894145,
+            "code": "Standard",
+            "phone": null,
+            "price": "10.00",
+            "title": "Standard",
+            "source": "shopify",
+            "price_set": {
+                "shop_money": {
+                    "amount": "10.00",
+                    "currency_code": "AUD"
+                },
+                "presentment_money": {
+                    "amount": "10.00",
+                    "currency_code": "AUD"
+                }
+            },
+            "tax_lines": [],
+            "is_removed": false,
+            "discounted_price": "10.00",
+            "carrier_identifier": "2ffa3e5d7e0311e260c10350738dd1f0",
+            "discount_allocations": [],
+            "discounted_price_set": {
+                "shop_money": {
+                    "amount": "10.00",
+                    "currency_code": "AUD"
+                },
+                "presentment_money": {
+                    "amount": "10.00",
+                    "currency_code": "AUD"
+                }
+            },
+            "requested_fulfillment_service_id": null
+        }
+    ],
+    "subtotal_price": "99.99",
+    "taxes_included": false,
+    "billing_address": {
+        "zip": "3000",
+        "city": "Melbourne",
+        "name": "van ha",
+        "phone": null,
+        "company": null,
+        "country": "Australia",
+        "address1": "447 Collins Street",
+        "address2": null,
+        "latitude": -37.8184462,
+        "province": "Victoria",
+        "last_name": "ha",
+        "longitude": 144.9584831,
+        "first_name": "van",
+        "country_code": "AU",
+        "province_code": "VIC"
+    },
+    "customer_locale": "en",
+    "estimated_taxes": false,
+    "note_attributes": [],
+    "total_discounts": "0.00",
+    "total_price_set": {
+        "shop_money": {
+            "amount": "109.99",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "109.99",
+            "currency_code": "AUD"
+        }
+    },
+    "financial_status": "paid",
+    "landing_site_ref": null,
+    "order_status_url": "https://e67c7d-b3.myshopify.com/61407297601/orders/aba9919edfd9c3e971d7e0bec95ba999/authenticate?key=f6a938c2dffb2f73429d641471a2981c",
+    "shipping_address": {
+        "zip": "3000",
+        "city": "Melbourne",
+        "name": "van ha",
+        "phone": null,
+        "company": null,
+        "country": "Australia",
+        "address1": "447 Collins Street",
+        "address2": null,
+        "latitude": -37.8184462,
+        "province": "Victoria",
+        "last_name": "ha",
+        "longitude": 144.9584831,
+        "first_name": "van",
+        "country_code": "AU",
+        "province_code": "VIC"
+    },
+    "current_total_tax": "0.00",
+    "source_identifier": "2ec3444f89a6557b0b8d1b38c88b4812",
+    "total_outstanding": "0.00",
+    "fulfillment_status": null,
+    "subtotal_price_set": {
+        "shop_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        }
+    },
+    "total_tip_received": "0.00",
+    "confirmation_number": "5Z91K8JJU",
+    "current_total_price": "109.99",
+    "total_discounts_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        }
+    },
+    "admin_graphql_api_id": "gid://shopify/Order/5588689944641",
+    "presentment_currency": "AUD",
+    "current_total_tax_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        }
+    },
+    "discount_applications": [],
+    "payment_gateway_names": [
+        "shopify_payments"
+    ],
+    "current_subtotal_price": "99.99",
+    "total_line_items_price": "99.99",
+    "buyer_accepts_marketing": false,
+    "current_total_discounts": "0.00",
+    "current_total_price_set": {
+        "shop_money": {
+            "amount": "109.99",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "109.99",
+            "currency_code": "AUD"
+        }
+    },
+    "current_total_duties_set": null,
+    "total_shipping_price_set": {
+        "shop_money": {
+            "amount": "10.00",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "10.00",
+            "currency_code": "AUD"
+        }
+    },
+    "merchant_of_record_app_id": null,
+    "original_total_duties_set": null,
+    "current_subtotal_price_set": {
+        "shop_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        }
+    },
+    "total_line_items_price_set": {
+        "shop_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "99.99",
+            "currency_code": "AUD"
+        }
+    },
+    "current_total_discounts_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "AUD"
+        }
+    },
+    "merchant_business_entity_id": "MTYxNDA3Mjk3NjAx",
+    "current_total_additional_fees_set": null,
+    "original_total_additional_fees_set": null
+}
