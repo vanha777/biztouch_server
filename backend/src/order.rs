@@ -49,7 +49,6 @@ pub struct Order {
     pub id: i32,
     pub name: String,
     pub data: serde_json::Value,
-    pub created_at: String,
 }
 
 pub async fn get_all(State(state): State<AppState>) -> Result<Json<Vec<Order>>, impl IntoResponse> {
