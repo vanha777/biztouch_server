@@ -1,4 +1,7 @@
-use crate::{order::create, AppState};
+use crate::{
+    order::{create, get_all},
+    AppState,
+};
 use axum::{
     http::{self},
     middleware::{self},
@@ -53,7 +56,7 @@ pub fn create_api_router(state: AppState) -> Router {
         .route("/login", post(login))
         .route("/logout", get(logout));
 
-    let order_router = Router::new().route("/create", post(create));
+    let order_router = Router::new().route("/create", post(create).get(get_all));
 
     Router::new()
         .nest("/customers", customers_router)
