@@ -48,7 +48,7 @@ pub async fn create(
 pub struct Order {
     pub id: i32,
     pub name: String,
-    pub data: String,
+    pub data: serde_json::Value,
     pub created_at: String,
 }
 
