@@ -6,8 +6,8 @@ use axum::{
     Json,
 };
 use axum_extra::extract::cookie::{Cookie, PrivateCookieJar, SameSite};
-use serde::Deserialize;
-use sqlx::Row;
+use serde::{Deserialize, Serialize};
+use sqlx::{postgres::PgRow, Row};
 use time::Duration;
 
 use crate::AppState;
@@ -42,32 +42,22 @@ pub async fn create(
             .into_response(),
     }
 }
-pub async fn get_all(
-    State(state): State<AppState>,
-    // Json(request): Json<serde_json::Value>,
-) -> impl IntoResponse {
-    let query = sqlx::query("SELECT * FROM my_table")
-        .fetch_all(&state.postgres)
-        .await;
-    match query {
-        Ok(rows) => {
-            let result: Vec<serde_json::Value> = rows
-                .into_iter()
-                .map(|row| {
-                    serde_json::json!({
-                        "type": row.get::<String, _>("name"),
-                        "order": row.get::<String, _>("data"),
-                        "created_at": row.get::<String, _>("created_at"),
-                    })
-                })
-                .collect();
 
-            (StatusCode::OK, Json(result)).into_response()
-        }
-        Err(_) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({"error": "Something went wrong"})),
-        )
-            .into_response(),
+#[derive(Deserialize, sqlx::FromRow, Serialize)]
+#[allow(non_snake_case)]
+pub struct Order {
+    pub id: i32,
+    pub name: String,
+    pub data: String,
+    pub created_at: String,
+}
+
+pub async fn get_all(State(state): State<AppState>) -> Result<Json<Vec<Order>>, impl IntoResponse> {
+    match sqlx::query_as::<_, Order>("SELECT * FROM my_table")
+        .fetch_all(&state.postgres)
+        .await
+    {
+        Ok(res) => Ok(Json(res)),
+        Err(err) => Err((StatusCode::INTERNAL_SERVER_ERROR, err.to_string()).into_response()),
     }
 }
