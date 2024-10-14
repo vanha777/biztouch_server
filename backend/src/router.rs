@@ -5,7 +5,7 @@ use crate::{
 use axum::{
     http::{self},
     middleware::{self},
-    routing::{get, post},
+    routing::{delete, get, post, put},
     Router,
 };
 use http::header::{ACCEPT, AUTHORIZATION, ORIGIN};
@@ -15,13 +15,13 @@ use tower_http::cors::CorsLayer;
 
 use crate::auth::{login, logout, register, validate_session};
 use crate::customers::{
-    create_customer, destroy_customer, edit_customer, get_all_customers, get_customer_names,
-    get_one_customer,
+    create_customer, destroy_customer, edit_customer
 };
 use crate::dashboard::get_dashboard_data;
 use crate::deals::{create_deal, destroy_deal, edit_deal, get_all_deals, get_one_deal};
 use crate::mail::subscribe;
 use crate::payments::create_checkout;
+use crate::user;
 
 pub fn create_api_router(state: AppState) -> Router {
     let cors = CorsLayer::new()
@@ -32,16 +32,16 @@ pub fn create_api_router(state: AppState) -> Router {
 
     let payments_router = Router::new().route("/pay", post(create_checkout));
 
-    let customers_router = Router::new()
-        .route("/", post(get_all_customers))
-        .route("/names", post(get_customer_names))
-        .route(
-            "/:id",
-            post(get_one_customer)
-                .put(edit_customer)
-                .delete(destroy_customer),
-        )
-        .route("/create", post(create_customer));
+    // let customers_router = Router::new()
+    //     .route("/", post(get_all_customers))
+    //     .route("/names", post(get_customer_names))
+    //     .route(
+    //         "/:id",
+    //         post(get_one_customer)
+    //             .put(edit_customer)
+    //             .delete(destroy_customer),
+    //     )
+    //     .route("/create", post(create_customer));
 
     let deals_router = Router::new()
         .route("/", post(get_all_deals))
@@ -60,8 +60,14 @@ pub fn create_api_router(state: AppState) -> Router {
         .route("/create", post(create))
         .route("/get", get(get_all));
 
+    let user_router = Router::new()
+        .route("/create", post(user::create))
+        .route("/update/:username", put(user::update))
+        .route("/get", get(user::get))
+        .route("/delete/:username", delete(user::delete));
+
     Router::new()
-        .nest("/customers", customers_router)
+        // .nest("/customers", customers_router)
         .nest("/deals", deals_router)
         .nest("/payments", payments_router)
         .route("/dashboard", post(get_dashboard_data))
@@ -73,6 +79,7 @@ pub fn create_api_router(state: AppState) -> Router {
         .nest("/order", order_router)
         .route("/subscribe", post(subscribe))
         .route("/health", get(hello_world))
+        .nest("/user", user_router)
         .with_state(state)
         .layer(cors)
 }
