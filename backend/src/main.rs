@@ -20,6 +20,8 @@ use router::create_api_router;
 pub struct AppState {
     pub postgres: PgPool,
     pub supabase_postgres: PgPool,
+    pub supabase_storage_url: String,
+    pub supabase_api_key: String,
     pub stripe_key: String,
     pub stripe_sub_price: String,
     pub mailgun_key: String,
@@ -44,8 +46,16 @@ async fn main(
         .await
         .expect("Failed to run migrations");
     // Initialize Supabase PostgreSQL Pool
-    let (stripe_key, stripe_sub_price, mailgun_key, mailgun_url, domain, supabase_url) =
-        grab_secrets(secrets);
+    let (
+        stripe_key,
+        stripe_sub_price,
+        mailgun_key,
+        mailgun_url,
+        domain,
+        supabase_url,
+        supabase_storage_url,
+        supabase_api_key,
+    ) = grab_secrets(secrets);
 
     let supabase_postgres = PgPool::connect(&supabase_url)
         .await
@@ -60,6 +70,8 @@ async fn main(
         mailgun_url,
         domain,
         key: Key::generate(),
+        supabase_api_key,
+        supabase_storage_url,
     };
 
     let api_router = create_api_router(state);
@@ -74,7 +86,16 @@ async fn main(
 
 fn grab_secrets(
     secrets: shuttle_runtime::SecretStore,
-) -> (String, String, String, String, String, String) {
+) -> (
+    String,
+    String,
+    String,
+    String,
+    String,
+    String,
+    String,
+    String,
+) {
     let stripe_key = secrets
         .get("STRIPE_KEY")
         .unwrap_or_else(|| "None".to_string());
@@ -100,6 +121,14 @@ fn grab_secrets(
         .get("SUPABASE_DB_URL")
         .expect("Supabase DB URL must be set");
 
+    let supabase_storage_url = secrets
+        .get("SUPABASE_STORAGE_URL")
+        .unwrap_or_else(|| "".to_string());
+
+    let supabase_api_key = secrets
+        .get("SUPABASE_API_KEY")
+        .unwrap_or_else(|| "".to_string());
+
     (
         stripe_key,
         stripe_sub_price,
@@ -107,5 +136,7 @@ fn grab_secrets(
         mailgun_url,
         domain,
         supabase_url,
+        supabase_storage_url,
+        supabase_api_key,
     )
 }

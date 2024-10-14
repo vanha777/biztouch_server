@@ -11,12 +11,9 @@ use axum::{
 use http::header::{ACCEPT, AUTHORIZATION, ORIGIN};
 use http::HeaderValue;
 use http::Method;
-use tower_http::cors::CorsLayer;
+use tower_http::cors::{Any, CorsLayer};
 
 use crate::auth::{login, logout, register, validate_session};
-use crate::customers::{
-    create_customer, destroy_customer, edit_customer
-};
 use crate::dashboard::get_dashboard_data;
 use crate::deals::{create_deal, destroy_deal, edit_deal, get_all_deals, get_one_deal};
 use crate::mail::subscribe;
@@ -24,11 +21,17 @@ use crate::payments::create_checkout;
 use crate::user;
 
 pub fn create_api_router(state: AppState) -> Router {
+    // let cors = CorsLayer::new()
+    //     .allow_credentials(true)
+    //     .allow_methods(vec![Method::GET, Method::POST, Method::PUT, Method::DELETE])
+    //     .allow_headers(vec![ORIGIN, AUTHORIZATION, ACCEPT])
+    //     // .allow_origin(state.domain.parse::<HeaderValue>().unwrap());
+    //     .allow_origin("*".parse::<HeaderValue>().unwrap());
+
     let cors = CorsLayer::new()
-        .allow_credentials(true)
-        .allow_methods(vec![Method::GET, Method::POST, Method::PUT, Method::DELETE])
-        .allow_headers(vec![ORIGIN, AUTHORIZATION, ACCEPT])
-        .allow_origin(state.domain.parse::<HeaderValue>().unwrap());
+        .allow_origin(Any)
+        .allow_methods(Any) // Allows any HTTP method
+        .allow_headers(Any); // Allows any headers
 
     let payments_router = Router::new().route("/pay", post(create_checkout));
 
