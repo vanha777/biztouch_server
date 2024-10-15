@@ -3,14 +3,12 @@ use crate::{
     AppState,
 };
 use axum::{
-    http::{self},
-    middleware::{self},
-    routing::{delete, get, post, put},
-    Router,
+    extract::DefaultBodyLimit, http::{self}, middleware::{self}, routing::{delete, get, post, put}, Router
 };
 use http::header::{ACCEPT, AUTHORIZATION, ORIGIN};
 use http::HeaderValue;
 use http::Method;
+use tower::ServiceBuilder;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::auth::{login, logout, register, validate_session};
@@ -66,6 +64,7 @@ pub fn create_api_router(state: AppState) -> Router {
     let user_router = Router::new()
         .route("/create", post(user::create))
         .route("/update/:username", put(user::update))
+        .layer(DefaultBodyLimit::max(50 * 1024 * 1024))
         .route("/get", get(user::get))
         .route("/delete/:username", delete(user::delete));
 
