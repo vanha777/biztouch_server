@@ -429,7 +429,7 @@ pub async fn update(
 // Function to overwrite profile photo to Supabase Storage
 pub async fn overwrite_in_supabase(
     supabase_api_key: &str,
-    mut file_link: &str,
+    file_link: &str,
     base64_data: &str,
 ) -> Result<(String, String), Box<dyn Error>> {
     let client = Client::new();
@@ -450,6 +450,7 @@ pub async fn overwrite_in_supabase(
     let mime_type = detect_mime_type(&decoded_bytes)?;
 
     // Use PUT request to overwrite the file in Supabase Storage
+    let read_url = file_link;
     let upload_url = file_link.replace("public/", "");
     println!("Uploading to: {}", upload_url);
 
@@ -463,11 +464,10 @@ pub async fn overwrite_in_supabase(
 
     if response.status().is_success() {
         println!("File overwritten successfully.");
+        return Ok((read_url.to_string(), mime_type));
     } else {
-        println!("Failed to overwrite file: {:?}", response.status());
+        return Err(format!("Failed to overwrite file: {}", response.text().await?).into());
     }
-
-    Ok((response.text().await.unwrap(), mime_type))
 }
 
 // Function to upload file to Supabase Storage
@@ -494,14 +494,18 @@ pub async fn upload_to_supabase(
 
     // Generate a random hash for the file name
     let file_name = uuid::Uuid::new_v4().to_string();
-    let url = format!(
+    let read_url = format!(
+        "{}/storage/v1/object/public/biz_touch/{}/{}",
+        supabase_url, upload_bucket, file_name
+    );
+    let upload_url = format!(
         "{}/storage/v1/object/biz_touch/{}/{}",
         supabase_url, upload_bucket, file_name
     );
 
     // Upload to Supabase Storage
     match client
-        .post(&url)
+        .post(&upload_url)
         .bearer_auth(supabase_api_key) // Supabase API key
         .header("Content-Type", mime_type.as_str()) // Set the appropriate content type
         .body(decoded_bytes) // Send the decoded bytes
@@ -510,7 +514,7 @@ pub async fn upload_to_supabase(
     {
         Ok(x) => {
             if x.status().is_success() {
-                Ok((url, mime_type))
+                Ok((read_url, mime_type))
             } else {
                 Err(format!("Failed to upload file: {}", x.text().await?).into())
             }
