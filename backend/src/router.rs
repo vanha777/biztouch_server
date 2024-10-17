@@ -3,7 +3,11 @@ use crate::{
     AppState,
 };
 use axum::{
-    extract::DefaultBodyLimit, http::{self}, middleware::{self}, routing::{delete, get, post, put}, Router
+    extract::DefaultBodyLimit,
+    http::{self},
+    middleware::{self},
+    routing::{delete, get, post, put},
+    Router,
 };
 use http::header::{ACCEPT, AUTHORIZATION, ORIGIN};
 use http::HeaderValue;
@@ -53,7 +57,7 @@ pub fn create_api_router(state: AppState) -> Router {
         .route("/create", post(create_deal));
 
     let auth_router = Router::new()
-        // .route("/register", post(register))
+        .route("/register", post(register))
         .route("/login", post(login))
         .route("/logout", get(logout));
 

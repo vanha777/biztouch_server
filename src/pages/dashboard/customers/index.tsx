@@ -75,7 +75,7 @@ export default function CustomerIndex() {
   };
 
   const handleEdit = (customerId: string) => {
-    window.open(`https://biz-touch/login/${customerId}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://biz-touch.me/login/${customerId}`, '_blank', 'noopener,noreferrer');
   };
 
   return (

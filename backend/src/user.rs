@@ -93,8 +93,7 @@ pub struct FeUserRequest {
     first_name: String,
     #[serde(rename = "lastName")]
     last_name: String,
-    #[serde(rename = "phoneNumber")]
-    phone_number: String,
+    phone: String,
     old_profile_media: Option<String>,
     old_cover_media: Option<String>,
     email: String,
@@ -164,6 +163,7 @@ pub async fn create(
             // Check if the username already exists in the database
             let exists: bool =
                 sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)")
+                    .persistent(false)
                     .bind(&username)
                     .fetch_one(&state.supabase_postgres)
                     .await
@@ -178,6 +178,7 @@ pub async fn create(
 
     let query = "INSERT INTO users (first_name, last_name, username, email, phone, title, bio, photo, qr_code, theme, media, social, linkable_id, linkable_type, campaign_id, address, suburb, post_code, country, state, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::jsonb, $12::jsonb, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *";
     match sqlx::query_as::<_, UserResponse>(query)
+        .persistent(false)
         .bind(new_user.first_name)
         .bind(new_user.last_name)
         .bind(new_user.username)
@@ -216,6 +217,7 @@ pub async fn delete(
 ) -> impl IntoResponse {
     let query = "DELETE FROM users WHERE username = $1";
     match sqlx::query(query)
+        .persistent(false)
         .bind(username)
         .execute(&state.supabase_postgres)
         .await
@@ -239,9 +241,6 @@ pub async fn update(
     Path(username): Path<String>,
     Json(updated_user): Json<FeUserRequest>,
 ) -> impl IntoResponse {
-    return (StatusCode::INTERNAL_SERVER_ERROR, "Not Allowed".to_string()).into_response();
-    // println!("this is request {:#?}", updated_user);
-    // println!("this is user {}", username);
     println!("debug 0");
     // mapping updated_user to struct UserRequest
     // remove profile photo and upload ......
@@ -364,7 +363,7 @@ pub async fn update(
         first_name: updated_user.first_name,
         last_name: updated_user.last_name,
         email: updated_user.email,
-        phone: updated_user.phone_number,
+        phone: updated_user.phone,
         title: updated_user.title,
         bio: updated_user.bio,
         photo: profile_media,
@@ -376,6 +375,7 @@ pub async fn update(
     let query = "UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4, title = $5, bio = $6, photo = $7, qr_code = $8, theme = $9, media = $10::jsonb, social = $11::jsonb WHERE username = $12 RETURNING *";
     println!("debug 13");
     match sqlx::query_as::<_, UserResponse>(query)
+        .persistent(false)
         .bind(request.first_name)
         .bind(request.last_name)
         .bind(request.email)

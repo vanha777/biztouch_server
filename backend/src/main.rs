@@ -1,7 +1,10 @@
 use axum::extract::FromRef;
 use axum::Router;
 use axum_extra::extract::cookie::Key;
-use sqlx::{postgres::{PgConnectOptions, PgPoolOptions}, PgPool};
+use sqlx::{
+    postgres::{PgConnectOptions, PgPoolOptions},
+    PgPool,
+};
 use tower_http::services::{ServeDir, ServeFile};
 
 mod auth;
@@ -61,11 +64,13 @@ async fn main(
     //     .await
     //     .expect("Failed to connect to Supabase PostgreSQL");
     // Configure the PgConnectOptions with statement cache capacity set to 0
-    let database_url = supabase_url.parse::<PgConnectOptions>().expect("Failed to parse Supabase URL");
-    let connect_options = database_url
-        .statement_cache_capacity(0); // Disable statement caching
+    let database_url = supabase_url
+        .parse::<PgConnectOptions>()
+        .expect("Failed to parse Supabase URL");
 
-    // Create a new PgPool using the customized options
+    // Disable statement caching
+    let connect_options = database_url.statement_cache_capacity(0);
+
     let supabase_postgres = PgPoolOptions::new()
         .max_connections(5) // Set the maximum number of connections
         .connect_with(connect_options)
