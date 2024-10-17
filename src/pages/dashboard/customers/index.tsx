@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 import { accountStore } from '@/stores/zustandStore';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface Customer {
   id: number;
-  firstname: string;
-  lastname: string;
+  username: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
 }
@@ -22,19 +23,18 @@ export default function CustomerIndex() {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const url = `//${window.location.host}/api/customers`;
+      const url = `//${window.location.host}/api/user/get`;
 
       try {
         const res = await fetch(url, {
-          method: 'POST',
+          method: 'GET',
           mode: 'cors',
-          headers: new Headers({
-            'Content-Type': 'application/json',
-          }),
-
-          body: JSON.stringify({
-            email: email,
-          }),
+          // headers: new Headers({
+          //   'Content-Type': 'application/json',
+          // }),
+          // body: JSON.stringify({
+          //   email: email,
+          // }),
         });
 
         if (res.status == 403) {
@@ -51,19 +51,19 @@ export default function CustomerIndex() {
     fetchData();
   }, [email, router]);
 
-  const handleDelete = async (customerId: number) => {
-    const url = `//${window.location.host}/api/customers/${customerId}`;
+  const handleDelete = async (customerId: string) => {
+    const url = `//${window.location.host}/api/user/delete/${customerId}`;
 
     try {
       const res = await fetch(url, {
         mode: 'cors',
         method: 'DELETE',
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify({
-          email: email,
-        }),
+        // headers: new Headers({
+        //   'Content-Type': 'application/json',
+        // }),
+        // body: JSON.stringify({
+        //   email: email,
+        // }),
       });
 
       if (res.ok) {
@@ -72,6 +72,10 @@ export default function CustomerIndex() {
     } catch (e: any) {
       console.log(`Error: ${e}`);
     }
+  };
+
+  const handleEdit = (customerId: string) => {
+    window.open(`https://biz-touch/login/${customerId}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -93,6 +97,9 @@ export default function CustomerIndex() {
                 Phone Number
               </th>
               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                UserName
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 More Info
               </th>
             </tr>
@@ -104,7 +111,7 @@ export default function CustomerIndex() {
                   <div className="flex items-center">
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {cust.firstname} {cust.lastname}
+                        {cust.first_name} {cust.last_name}
                       </p>
                     </div>
                   </div>
@@ -116,13 +123,27 @@ export default function CustomerIndex() {
                   <p className="text-gray-900 whitespace-no-wrap">{cust.phone}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <button
-                    data-id={cust.id}
-                    onClick={() => handleDelete(cust.id)}
-                    className="px-5 py-2 hover:bg-red-700 transition-all mt-4 rounded text-white bg-red-500"
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="white" /> Delete Customer
-                  </button>
+                <a href={`https://biz-touch.me/${cust.username}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 whitespace-no-wrap hover:underline">
+                  {cust.username}
+                </a>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <div className="flex flex-row space-x-2">
+                    <button
+                      data-id={cust.username}
+                      onClick={() => handleEdit(cust.username)}
+                      className="px-3 py-2 hover:bg-blue-700 transition-all rounded text-white bg-blue-500"
+                    >
+                      <FontAwesomeIcon icon={faEdit} color="white" /> Edit
+                    </button>
+                    <button
+                      data-id={cust.username}
+                      onClick={() => handleDelete(cust.username)}
+                      className="px-3 py-2 hover:bg-red-700 transition-all rounded text-white bg-red-500"
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="white" /> Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

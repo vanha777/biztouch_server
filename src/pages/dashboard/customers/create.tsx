@@ -17,7 +17,7 @@ export default function CreateCustomer() {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const url = `//${window.location.host}/api/customers/create`;
+    const url = `//${window.location.host}/api/user/create`;
 
     try {
       let res = await fetch(url, {
@@ -27,12 +27,12 @@ export default function CreateCustomer() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
+          first_name: firstName,
+          last_name: lastName,
           email: custEmail,
-          phone: phone,
-          priority: Number(priority),
-          userEmail: email,
+          // phone: phone,
+          // priority: Number(priority),
+          // userEmail: email,
         }),
       });
 
@@ -62,7 +62,7 @@ export default function CreateCustomer() {
           w-50
           max-w-md"
           >
-            <h1 className="lg:text-2xl text-xl text-center">New Customer</h1>
+            <h1 className="lg:text-2xl text-xl text-center">New User</h1>
             <fieldset className="mt-10">
               <label htmlFor="first_name" className="text-xs tracking-wide text-gray-600">
                 First name:
@@ -119,7 +119,7 @@ export default function CreateCustomer() {
                   placeholder="Enter email address"
                 />
               </label>
-              <label htmlFor="phone" className="text-xs tracking-wide text-gray-600">
+              {/* <label htmlFor="phone" className="text-xs tracking-wide text-gray-600">
                 <span>Mobile number: </span>
                 <input
                   type="text"
@@ -136,8 +136,8 @@ export default function CreateCustomer() {
                   onInput={(e) => setPhone((e.target as HTMLInputElement).value)}
                   placeholder="Enter mobile number"
                 />
-              </label>
-              <label htmlFor="priority" className="text-xs tracking-wide text-gray-600">
+              </label> */}
+              {/* <label htmlFor="priority" className="text-xs tracking-wide text-gray-600">
                 <span>Priority: </span>
                 <select
                   name="priority"
@@ -158,7 +158,7 @@ export default function CreateCustomer() {
                   <option value="4">High</option>
                   <option value="5">Very High</option>
                 </select>
-              </label>
+              </label> */}
               <div className="flex w-full">
                 <button
                   type="submit"

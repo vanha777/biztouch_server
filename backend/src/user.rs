@@ -130,7 +130,6 @@ struct Social {
 pub async fn get(
     State(state): State<AppState>,
     // Query(id): Query<Option<String>>,
-    Json(req): Json<serde_json::Value>,
 ) -> impl IntoResponse {
     match sqlx::query_as::<_, UserResponse>("SELECT * FROM users")
         .persistent(false)
@@ -240,6 +239,7 @@ pub async fn update(
     Path(username): Path<String>,
     Json(updated_user): Json<FeUserRequest>,
 ) -> impl IntoResponse {
+    return (StatusCode::INTERNAL_SERVER_ERROR, "Not Allowed".to_string()).into_response();
     // println!("this is request {:#?}", updated_user);
     // println!("this is user {}", username);
     println!("debug 0");
