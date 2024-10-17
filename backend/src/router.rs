@@ -53,7 +53,7 @@ pub fn create_api_router(state: AppState) -> Router {
         .route("/create", post(create_deal));
 
     let auth_router = Router::new()
-        .route("/register", post(register))
+        // .route("/register", post(register))
         .route("/login", post(login))
         .route("/logout", get(logout));
 
