@@ -177,7 +177,7 @@ pub async fn create(
     }
 
     let query = "INSERT INTO users (first_name, last_name, username, email, phone, title, bio, photo, qr_code, theme, media, social, linkable_id, linkable_type, campaign_id, address, suburb, post_code, country, state, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::jsonb, $12::jsonb, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *";
-    match sqlx::query_as::<_, UserResponse>(query)
+    match sqlx::query(query)
         .persistent(false)
         .bind(new_user.first_name)
         .bind(new_user.last_name)
@@ -200,10 +200,16 @@ pub async fn create(
         .bind(new_user.country)
         .bind(new_user.state)
         .bind(new_user.r#type)
-        .fetch_one(&state.supabase_postgres)
+        .execute(&state.supabase_postgres)
         .await
     {
-        Ok(created_user) => (StatusCode::CREATED, Json(created_user)).into_response(),
+        Ok(created_user) => {
+            if created_user.rows_affected() == 0 {
+                (StatusCode::BAD_REQUEST, "Failed to created user").into_response()
+            } else {
+                (StatusCode::OK, "User created successfully").into_response()
+            }
+        }
         Err(e) => {
             eprintln!("Error creating user: {:?}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response()
@@ -374,7 +380,7 @@ pub async fn update(
     };
     let query = "UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4, title = $5, bio = $6, photo = $7, qr_code = $8, theme = $9, media = $10::jsonb, social = $11::jsonb WHERE username = $12 RETURNING *";
     println!("debug 13");
-    match sqlx::query_as::<_, UserResponse>(query)
+    match sqlx::query(query)
         .persistent(false)
         .bind(request.first_name)
         .bind(request.last_name)
@@ -415,12 +421,18 @@ pub async fn update(
         // .bind(updated_user.state)
         // .bind(updated_user.r#type)
         .bind(username)
-        .fetch_one(&state.supabase_postgres)
+        .execute(&state.supabase_postgres)
         .await
     {
-        Ok(updated_user) => (StatusCode::OK, Json(updated_user)).into_response(),
+        Ok(result) => {
+            if result.rows_affected() == 0 {
+                (StatusCode::BAD_REQUEST, "User not updated").into_response()
+            } else {
+                (StatusCode::OK, "User updated successfully").into_response()
+            }
+        }
         Err(e) => {
-            eprintln!("Error updating user: {:?}", e);
+            eprintln!("Error deleting user: {:?}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response()
         }
     }
