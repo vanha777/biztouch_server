@@ -68,7 +68,7 @@ pub fn create_api_router(state: AppState) -> Router {
     let user_router = Router::new()
         .route("/create", post(user::create))
         .route("/update/:username", put(user::update))
-        .layer(DefaultBodyLimit::max(50 * 1024 * 1024))
+        .layer(DefaultBodyLimit::max(20 * 1024 * 1024)) // 20 MB
         .route("/get", get(user::get))
         .route("/delete/:username", delete(user::delete));
 

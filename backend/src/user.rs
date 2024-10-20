@@ -307,8 +307,8 @@ pub async fn update(
                     cover_media = vec![Media {
                         info: "This Is My Cover Media".to_string(),
                         r#type: match mime_type {
-                            mime if mime.starts_with("image/") => "image".to_string(),
-                            mime if mime.starts_with("video/") => "video".to_string(),
+                            mime if mime.contains("image") => "image".to_string(),
+                            mime if mime.contains("video") => "video".to_string(),
                             _ => "image".to_string(),
                         },
                         media: file_link,
