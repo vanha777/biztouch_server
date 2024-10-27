@@ -9,10 +9,6 @@ use axum::{
     routing::{delete, get, post, put},
     Router,
 };
-use http::header::{ACCEPT, AUTHORIZATION, ORIGIN};
-use http::HeaderValue;
-use http::Method;
-use tower::ServiceBuilder;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::auth::{login, logout, register, validate_session};

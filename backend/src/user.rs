@@ -40,7 +40,7 @@ pub struct UserResponse {
     first_name: Option<String>,
     last_name: Option<String>,
     username: Option<String>,
-    email: Option<String>,
+    email: String,
     phone: Option<String>,
     title: Option<String>,
     bio: Option<String>,
