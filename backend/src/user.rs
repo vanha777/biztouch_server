@@ -11,6 +11,7 @@ use base64::decode;
 use chrono::{DateTime, NaiveDateTime, Utc};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 
 use crate::AppState;
 
@@ -181,7 +182,7 @@ pub async fn create(
         .persistent(false)
         .bind(new_user.first_name)
         .bind(new_user.last_name)
-        .bind(new_user.username)
+        .bind(new_user.username.clone())
         .bind(new_user.email)
         .bind(new_user.phone)
         .bind(new_user.title)
@@ -207,7 +208,11 @@ pub async fn create(
             if created_user.rows_affected() == 0 {
                 (StatusCode::BAD_REQUEST, "Failed to created user").into_response()
             } else {
-                (StatusCode::OK, "User created successfully").into_response()
+                (
+                    StatusCode::OK,
+                    Json(json!({ "username": new_user.username })),
+                )
+                    .into_response()
             }
         }
         Err(e) => {
