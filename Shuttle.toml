@@ -1,4 +1,16 @@
-deploy.include = [
-    "dist/*",
+# deploy.include = [
+#     "dist/*",
+# ]
+[deploy]
+include = [
+  "file.txt", # include file.txt
+  "dist/*", # include all files and subdirs in frontend/dist/
+  "static/*", # include all files and subdirs in static/
+]
+[build]
+assets = [
+  "file.txt", # include file.txt
+  "dist/*", # include all files and subdirs in frontend/dist/
+  "static/*", # include all files and subdirs in static/
 ]
 name = "biztouch-server"
