@@ -1,5 +1,5 @@
 use crate::{
-    order::{create, get_all},
+    order::{create, get_all, oauth_token},
     AppState,
 };
 use axum::{
@@ -58,8 +58,9 @@ pub fn create_api_router(state: AppState) -> Router {
         .route("/logout", get(logout));
 
     let order_router = Router::new()
-        .route("/create", post(create))
-        .route("/get", get(get_all));
+        .route("/order", post(create))
+        .route("/order/get", get(get_all))
+        .route("/oauth/token", post(oauth_token));
 
     let user_router = Router::new()
         .route("/create", post(user::create))
@@ -78,7 +79,8 @@ pub fn create_api_router(state: AppState) -> Router {
             validate_session,
         ))
         .nest("/auth", auth_router)
-        .nest("/order", order_router)
+        // .nest("/order", order_router)
+        .merge(order_router)
         .route("/subscribe", post(subscribe))
         .route("/health", get(hello_world))
         .nest("/user", user_router)
