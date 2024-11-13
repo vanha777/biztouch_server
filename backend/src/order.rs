@@ -26,13 +26,26 @@ pub struct LoginDetails {
     password: String,
 }
 
+
+#[derive(Serialize,Deserialize)]
+pub struct OrderRequest {
+    details: serde_json::Value,
+    items: serde_json::Value,
+    r#type: String,
+    status:String,
+    customer:serde_json::Value,
+    warehouse:serde_json::Value,
+    version:i32,
+    references:serde_json::Value,
+    id:String
+}
+
 pub async fn create(
     State(state): State<AppState>,
-    Json(request): Json<serde_json::Value>,
+    Json(request): Json<OrderRequest>,
 ) -> impl IntoResponse {
-    let query = sqlx::query("INSERT INTO my_table (name, data) VALUES ($1, $2)")
-        .bind("test 0".to_string())
-        .bind(request)
+    let query = sqlx::query("INSERT INTO my_table (data) VALUES ($1)")
+        .bind(serde_json::to_value(&request).unwrap())
         .execute(&state.postgres);
     match query.await {
         Ok(_) => (StatusCode::CREATED, "Order created!".to_string()).into_response(),
