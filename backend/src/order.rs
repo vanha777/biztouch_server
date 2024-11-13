@@ -26,27 +26,40 @@ pub struct LoginDetails {
     password: String,
 }
 
-
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct OrderRequest {
     details: serde_json::Value,
     items: serde_json::Value,
     r#type: String,
-    status:String,
-    customer:serde_json::Value,
-    warehouse:serde_json::Value,
-    version:i32,
-    references:serde_json::Value,
-    id:String
+    status: String,
+    customer: serde_json::Value,
+    warehouse: serde_json::Value,
+    version: i32,
+    references: serde_json::Value,
+    id: String,
 }
 
 pub async fn create(
+    headers: axum::http::HeaderMap,
     State(state): State<AppState>,
-    Json(request): Json<OrderRequest>,
+    Json(request): Json<serde_json::Value>,
 ) -> impl IntoResponse {
+    // Check for Authorization header
+    let auth_header = match headers.get("Authorization") {
+        Some(header) => header.to_str().unwrap_or(""),
+        None => {
+            return (StatusCode::UNAUTHORIZED, "No authorization header provided").into_response()
+        }
+    };
+
+    if !auth_header.starts_with("Bearer ") {
+        return (StatusCode::UNAUTHORIZED, "Invalid authorization format").into_response();
+    }
+    // let request = serde_json::to_value(&request).unwrap();
     let query = sqlx::query("INSERT INTO my_table (data) VALUES ($1)")
-        .bind(serde_json::to_value(&request).unwrap())
+        .bind(&request)
         .execute(&state.postgres);
+
     match query.await {
         Ok(_) => (StatusCode::CREATED, "Order created!".to_string()).into_response(),
         Err(e) => (
