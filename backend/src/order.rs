@@ -90,7 +90,7 @@ pub async fn oauth_token(
 #[allow(non_snake_case)]
 pub struct Order {
     pub id: i32,
-    pub name: String,
+    pub name: Option<String>,
     pub data: serde_json::Value,
 }
 
